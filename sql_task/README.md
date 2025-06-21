@@ -1,9 +1,11 @@
 Imported required Libraries
-import duckdb
-import pandas as pd
+
+    import duckdb
+    import pandas as pd
 
 Established in memeory db connection
-con = duckdb.connect()
+    
+    con = duckdb.connect()
 
 Imported two tables as SQL tables using any SQL-related Python library.
   
@@ -18,6 +20,7 @@ Imported two tables as SQL tables using any SQL-related Python library.
     """)
 
 Check one of the tables
+    
     print(con.execute("SELECT * FROM products_day1").fetchdf())
 
 #  --------------------------------------------------------------------Part 1
@@ -68,23 +71,23 @@ Exclude:
    Do not have an exact match (by all columns except product_id) in the old table.
    Do not have a matching product_id in the old table (i.e., it's not just a value update).
 
-    -- Truly added rows
-            -- this will fetch rows those are not having matching columns with day2 table without considering product_id
-            SELECT d2.*, 'ADDED' AS change_type
-            FROM products_day2 d2
-            WHERE NOT EXISTS (
-                SELECT 1 FROM products_day1 d1
-                WHERE d1.name = d2.name
-                  AND d1.category = d2.category
-                  AND d1.price = d2.price
-                  AND d1.stock = d2.stock
-            )
-            -- this condition filter outs the rows those were having matching productid in table 2 by considering those rows as updates
-            AND d2.product_id NOT IN (
-                SELECT d2a.product_id
-                FROM products_day2 d2a
-                JOIN products_day1 d1a ON d2a.product_id = d1a.product_id
-            );
+        -- Truly added rows
+                -- this will fetch rows those are not having matching columns with day2 table without considering product_id
+                SELECT d2.*, 'ADDED' AS change_type
+                FROM products_day2 d2
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM products_day1 d1
+                    WHERE d1.name = d2.name
+                      AND d1.category = d2.category
+                      AND d1.price = d2.price
+                      AND d1.stock = d2.stock
+                )
+                -- this condition filter outs the rows those were having matching productid in table 2 by considering those rows as updates
+                AND d2.product_id NOT IN (
+                    SELECT d2a.product_id
+                    FROM products_day2 d2a
+                    JOIN products_day1 d1a ON d2a.product_id = d1a.product_id
+                );
 
 
 Assign result set to a dataframe and display it for checking
