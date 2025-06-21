@@ -1,0 +1,3 @@
+product_id,name,category,price,stock,change_type
+106,Notebook,Stationery,2.99,300,REMOVED
+107,Smart Watch,Wearables,99.0,50,ADDED
